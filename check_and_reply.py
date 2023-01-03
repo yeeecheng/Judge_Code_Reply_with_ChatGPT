@@ -48,7 +48,7 @@ def start_chatGPT(opt,judge_result):
   code_filepath = opt.code
   lang = opt.lang
   # question filepath
-  question_description_filepath= f"./question/{question_title}/description.txt"
+  question_description_filepath= os.path.join(opt.question,f"./{question_title}/description.txt")
   
   # get file data
   problem = read_file(question_description_filepath)
@@ -77,10 +77,6 @@ def start_chatGPT(opt,judge_result):
 
 def main(opt):
   
-  os.chdir(opt.root)
-  print(os.getcwd())
-  opt.title =  "BuildingRoads"
-  opt.code ="/home/yi-cheng/Desktop/ChatGPT/question/BuildingRoads/solotion.cpp"
   ret= subprocess.run(f"python3 ./judge.py {opt.title} {opt.code}".split(),capture_output=True)
   judge_result = ret.returncode
   
@@ -91,7 +87,8 @@ def parse_opt(known):
   
   ROOT = os.getcwd()
   parser =argparse.ArgumentParser()
-  parser.add_argument("--root",type=str,default = ROOT)
+  parser.add_argument("--question",type=str)
+  parser.add_argument("--judge",type=str)
   parser.add_argument("--title",type=str,required=True, help = "question title")
   parser.add_argument("--code",type=str,required=True ,help = "the path of code file ")
   parser.add_argument("--lang",type=str,required=True,help = "you use programming language")
