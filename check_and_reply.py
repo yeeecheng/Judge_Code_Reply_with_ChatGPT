@@ -37,18 +37,18 @@ def create_question_toChatGPT(problem,code,lang,judge_result):
     case _:
       prompt = problem+"\n-----------------------\n"+verdict[str(judge_result)]+lang+"\n-----------------------\n"+code
   
-  
+  prompt += "\n\n請用中文回答我"
   return prompt
 
 
-def start_chatGPT(opt,judge_result):
+def start_chatGPT(args,judge_result):
   
-  
-  question_title = opt.title
-  code_filepath = opt.code
-  lang = opt.lang
+  question_filepath = args["question"]
+  code_filepath = args["code"]
+  config_filepath =args["session"]
+  lang = args["lang"]
   # question filepath
-  question_description_filepath= os.path.join(opt.question,f"./{question_title}/description.txt")
+  question_description_filepath= os.path.join(question_filepath,"./description.txt")
   
   # get file data
   problem = read_file(question_description_filepath)
@@ -59,7 +59,7 @@ def start_chatGPT(opt,judge_result):
   print(prompt)
   # get session token
   config = configparser.ConfigParser()
-  config.read('config.ini')
+  config.read(config_filepath)
   session_token = config['session_token']['session_token']
   
   # start connect ChatGPT
@@ -73,23 +73,30 @@ def start_chatGPT(opt,judge_result):
   with open(opt.save,"w") as f:
     f.write(rst_message)
 
+def print_input_args(args):
   
+  print("\n\n")
+  for i in args:
+    print(f"{i} : {args[i]}")
+  print("\n\n")
 
 def main(opt):
   
-  ret= subprocess.run(f"python3 ./judge.py {opt.title} {opt.code}".split(),capture_output=True)
-  judge_result = ret.returncode
+  args = vars(opt)
+  print_input_args(args)
+  
+  judge_result = args["judge_rst"]
   
   if judge_result :
-    start_chatGPT(opt,judge_result)
+    start_chatGPT(args,judge_result)
 
 def parse_opt(known):
   
-  ROOT = os.getcwd()
+  
   parser =argparse.ArgumentParser()
-  parser.add_argument("--question",type=str)
-  parser.add_argument("--judge",type=str)
-  parser.add_argument("--title",type=str,required=True, help = "question title")
+  parser.add_argument("--judge_rst",type=str,help="judge result")
+  parser.add_argument("--question",type=str ,help="question path")
+  parser.add_argument("--session",type=str ,help="config.ini path")
   parser.add_argument("--code",type=str,required=True ,help = "the path of code file ")
   parser.add_argument("--lang",type=str,required=True,help = "you use programming language")
   parser.add_argument("--save",type=str,default="./chatgpt_rst_msg.txt",help = "the path that save the charGPT return message ")
@@ -108,6 +115,5 @@ if __name__ == "__main__":
   opt = parse_opt(True)
   main(opt)
 
-
-# python3 ./judge.py BuildingRoads /home/yi-cheng/Desktop/ChatGPT/question/BuildingRoads/solution.cpp
+# python3 check_and_reply.py --judge_rst 4 --question /home/yi-cheng/Desktop/Judge_Code_Reply_with_ChatGPT/question/BuildingRoads --session /home/yi-cheng/Desktop/Judge_Code_Reply_with_ChatGPT/config.ini --lang c++
 
