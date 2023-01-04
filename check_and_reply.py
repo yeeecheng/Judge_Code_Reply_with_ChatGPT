@@ -27,10 +27,10 @@ def read_file(file_path):
 
 def create_question_toChatGPT(problem,code,lang,judge_result):
   
-  if judge_result:
-    prompt = verdict[str(judge_result)]+lang+"\n-----------------------\n"+code
+  if judge_result == "1":
+    prompt = verdict[judge_result]+lang+"\n-----------------------\n"+code
   else :
-    prompt = problem+"\n-----------------------\n"+verdict[str(judge_result)]+lang+"\n-----------------------\n"+code
+    prompt = problem+"\n-----------------------\n"+verdict[judge_result]+lang+"\n-----------------------\n"+code
     
   
   prompt += "\n\n請用中文回答我"
@@ -90,7 +90,7 @@ def parse_opt(known=False):
   
   
   parser =argparse.ArgumentParser()
-  parser.add_argument("--judge_rst",type=str,default = 0,help="judge result")
+  parser.add_argument("--judge_rst",type=str,default = "0",help="judge result")
   parser.add_argument("--question",type=str ,default="./question",help="question path")
   parser.add_argument("--session",type=str ,default="./config.ini",help="config.ini path")
   parser.add_argument("--code",type=str ,help = "the path of code file ")
