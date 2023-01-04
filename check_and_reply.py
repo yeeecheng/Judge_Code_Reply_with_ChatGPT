@@ -90,7 +90,7 @@ def parse_opt(known=False):
   
   
   parser =argparse.ArgumentParser()
-  parser.add_argument("--judge_rst",type=str,default = "0",help="judge result")
+  parser.add_argument("--judge_rst",type=str,required=True,help="judge result")
   parser.add_argument("--question",type=str ,default="./question",help="question path")
   parser.add_argument("--session",type=str ,default="./config.ini",help="config.ini path")
   parser.add_argument("--code",type=str ,help = "the path of code file ")
