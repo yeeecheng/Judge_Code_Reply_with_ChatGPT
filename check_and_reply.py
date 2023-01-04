@@ -90,15 +90,15 @@ def main(opt):
   if judge_result :
     start_chatGPT(args,judge_result)
 
-def parse_opt(known):
+def parse_opt(known=False):
   
   
   parser =argparse.ArgumentParser()
-  parser.add_argument("--judge_rst",type=str,help="judge result")
-  parser.add_argument("--question",type=str ,help="question path")
-  parser.add_argument("--session",type=str ,help="config.ini path")
-  parser.add_argument("--code",type=str,required=True ,help = "the path of code file ")
-  parser.add_argument("--lang",type=str,required=True,help = "you use programming language")
+  parser.add_argument("--judge_rst",type=str,default = 0,help="judge result")
+  parser.add_argument("--question",type=str ,default="./question",help="question path")
+  parser.add_argument("--session",type=str ,default="./config.ini",help="config.ini path")
+  parser.add_argument("--code",type=str ,help = "the path of code file ")
+  parser.add_argument("--lang",type=str,help = "you use programming language")
   parser.add_argument("--save",type=str,default="./chatgpt_rst_msg.txt",help = "the path that save the charGPT return message ")
   
   
@@ -112,7 +112,7 @@ def run(**kwargs):
   return opt
     
 if __name__ == "__main__":
-  opt = parse_opt(True)
+  opt = parse_opt()
   main(opt)
 
 # python3 check_and_reply.py --judge_rst 4 --question /home/yi-cheng/Desktop/Judge_Code_Reply_with_ChatGPT/question/BuildingRoads --session /home/yi-cheng/Desktop/Judge_Code_Reply_with_ChatGPT/config.ini --lang c++
