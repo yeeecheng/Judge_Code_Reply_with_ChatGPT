@@ -2,7 +2,6 @@ import argparse
 import configparser
 import os
 from pyChatGPT import ChatGPT
-import subprocess
 
 
 verdict ={
