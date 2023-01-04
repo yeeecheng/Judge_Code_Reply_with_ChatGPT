@@ -27,14 +27,11 @@ def read_file(file_path):
 
 def create_question_toChatGPT(problem,code,lang,judge_result):
   
-  
-  match judge_result:
+  if judge_result:
+    prompt = verdict[str(judge_result)]+lang+"\n-----------------------\n"+code
+  else :
+    prompt = problem+"\n-----------------------\n"+verdict[str(judge_result)]+lang+"\n-----------------------\n"+code
     
-    case 1:
-      
-      prompt = verdict[str(judge_result)]+lang+"\n-----------------------\n"+code
-    case _:
-      prompt = problem+"\n-----------------------\n"+verdict[str(judge_result)]+lang+"\n-----------------------\n"+code
   
   prompt += "\n\n請用中文回答我"
   return prompt
